@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-
 import requests
 import json
 import argparse
 import rpm
+from collections import defaultdict
 
 
 # Функция для получения списка пакетов с API
@@ -28,6 +28,15 @@ def get_full_version(pkg):
 # Функция для сравнения версий пакетов с использованием RPM
 def compare_versions(vr1, vr2):
     return rpm.labelCompare((None, vr1, ''), (None, vr2, ''))
+
+
+# Функция для группировки пакетов по архитектурам
+def group_by_arch(packages):
+    grouped_packages = defaultdict(list)
+    for pkg in packages:
+        arch = pkg['arch']
+        grouped_packages[arch].append(pkg)
+    return grouped_packages
 
 
 # Функция для сравнения двух списков пакетов и поиска различий
@@ -85,19 +94,28 @@ def main():
     branch1_packages = branch1_data['packages']
     branch2_packages = branch2_data['packages']
 
-    # print("Branch 1 packages (first 5):", [(pkg['name'], pkg['version']) for pkg in branch1_packages[:5]])
-    # print("Branch 2 packages (first 5):", [(pkg['name'], pkg['version']) for pkg in branch2_packages[:5]])
+    # Группируем пакеты по архитектурам
+    branch1_packages_by_arch = group_by_arch(branch1_packages)
+    branch2_packages_by_arch = group_by_arch(branch2_packages)
 
-    # Сравнение пакетов между ветками
-    branch1_not_in_branch2, branch2_not_in_branch1 = compare_lists(branch2_packages, branch1_packages)
-    branch1_newer = compare_versions_across_archs(branch2_packages, branch1_packages)
+    # Результат по каждой архитектуре
+    result = {}
 
-    result = {
-        f"{args.branch2}_not_in_{args.branch1}": branch2_not_in_branch1,
-        f"{args.branch1}_not_in_{args.branch2}": branch1_not_in_branch2,
-        f"{args.branch1}_newer": branch1_newer
-    }
+    for arch in branch1_packages_by_arch:
+        if arch in branch2_packages_by_arch:
+            branch1_arch_packages = branch1_packages_by_arch[arch]
+            branch2_arch_packages = branch2_packages_by_arch[arch]
 
+            branch1_not_in_branch2, branch2_not_in_branch1 = compare_lists(branch2_arch_packages, branch1_arch_packages)
+            branch1_newer = compare_versions_across_archs(branch2_arch_packages, branch1_arch_packages)
+
+            result[arch] = {
+                f"{args.branch2}_not_in_{args.branch1}": branch2_not_in_branch1,
+                f"{args.branch1}_not_in_{args.branch2}": branch1_not_in_branch2,
+                f"{args.branch1}_newer": branch1_newer
+            }
+
+    # Выводим результат
     if args.output:
         with open(args.output, 'w') as f:
             json.dump(result, f, indent=4)
