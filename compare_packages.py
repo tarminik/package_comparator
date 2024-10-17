@@ -40,39 +40,39 @@ def group_by_arch(packages):
 
 
 # Функция для сравнения двух списков пакетов и поиска различий
-def compare_lists(p10_list, sisyphus_list):
-    p10_packages = {pkg['name']: pkg for pkg in p10_list}
-    sisyphus_packages = {pkg['name']: pkg for pkg in sisyphus_list}
+def compare_lists(list1, list2):
+    list1_packages = {pkg['name']: pkg for pkg in list1}
+    list2_packages = {pkg['name']: pkg for pkg in list2}
 
-    # Пакеты, которые есть в p10, но нет в sisyphus, и наоборот
-    p10_not_in_sisyphus = [pkg for pkg in p10_packages if pkg not in sisyphus_packages]
-    sisyphus_not_in_p10 = [pkg for pkg in sisyphus_packages if pkg not in p10_packages]
+    # Пакеты, которые есть в list1, но нет в list2, и наоборот
+    list1_not_in_list2 = [pkg for pkg in list1_packages if pkg not in list2_packages]
+    list2_not_in_list1 = [pkg for pkg in list2_packages if pkg not in list1_packages]
 
-    return p10_not_in_sisyphus, sisyphus_not_in_p10
+    return list1_not_in_list2, list2_not_in_list1
 
 
 # Функция для сравнения версий пакетов между ветками для всех архитектур
-def compare_versions_across_archs(p10_packages, sisyphus_packages):
-    sisyphus_newer = {}
+def compare_versions_across_archs(list1, list2):
+    newer_in_list1 = {}
 
     # Преобразуем списки пакетов в словари для удобства сравнения по имени пакета
-    p10_dict = {pkg['name']: pkg for pkg in p10_packages}
-    sisyphus_dict = {pkg['name']: pkg for pkg in sisyphus_packages}
+    list1_dict = {pkg['name']: pkg for pkg in list1}
+    list2_dict = {pkg['name']: pkg for pkg in list2}
 
     # Сравниваем версии пакетов между ветками
-    for name, pkg_sisyphus in sisyphus_dict.items():
-        if name in p10_dict:
-            pkg_p10 = p10_dict[name]
-            sisyphus_vr = get_full_version(pkg_sisyphus)
-            p10_vr = get_full_version(pkg_p10)
-            # Если версия в sisyphus новее, добавляем в результат
-            if compare_versions(sisyphus_vr, p10_vr) > 0:
-                sisyphus_newer[name] = {
-                    'p10_version': p10_vr,
-                    'sisyphus_version': sisyphus_vr
+    for name, pkg_list1 in list1_dict.items():
+        if name in list2_dict:
+            pkg_list2 = list2_dict[name]
+            list1_vr = get_full_version(pkg_list1)
+            list2_vr = get_full_version(pkg_list2)
+            # Если версия в list1 новее, добавляем в результат
+            if compare_versions(list1_vr, list2_vr) > 0:
+                newer_in_list1[name] = {
+                    'list2_version': list2_vr,
+                    'list1_version': list1_vr
                 }
 
-    return sisyphus_newer
+    return newer_in_list1
 
 
 # Парсинг аргументов командной строки
