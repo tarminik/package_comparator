@@ -3,7 +3,7 @@
 import requests
 import json
 import argparse
-import rpm
+from rpm_version_compare import RPMVersionCompare
 from collections import defaultdict
 
 
@@ -27,7 +27,7 @@ def get_full_version(pkg):
 
 # Function to compare package versions using RPM
 def compare_versions(vr1, vr2):
-    return rpm.labelCompare((None, vr1, ''), (None, vr2, ''))
+    return RPMVersionCompare.rpm_label_compare((0, vr1, ''), (0, vr2, ''))
 
 
 # Function to group packages by architecture
