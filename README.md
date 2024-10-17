@@ -42,3 +42,43 @@ Example command:
  - ```--output``` – (Optional) The file to save the comparison result. If not provided, the result will be printed to the console.
 
 This will compare the packages from the two branches across all supported architectures and output the differences in the `result.json` file.
+
+## Result Format (result.json)
+
+The result is a JSON object with the following structure:
+```
+{
+    "arch1": {
+        "branch2_not_in_branch1": [
+            "package_name1",
+            "package_name2",
+            ...
+        ],
+        "branch1_not_in_branch2": [
+            "package_name3",
+            "package_name4",
+            ...
+        ],
+        "branch1_newer": {
+            "package_name5": {
+                "branch2_version": "version-release",
+                "branch1_version": "version-release"
+            },
+            "package_name6": {
+                "branch2_version": "version-release",
+                "branch1_version": "version-release"
+            },
+            ...
+        }
+    },
+    "arch2": {
+        ...
+    }
+}
+```
+
+### Explanation:
+ - "arch1": Represents the architecture (e.g., `x86_64`, `i586`, etc.). The result is separated by architectures.
+ - "branch2_not_in_branch1": Lists the packages that are present in `branch2` but not in `branch1`.
+ - "branch1_not_in_branch2": Lists the packages that are present in `branch1` but not in `branch2`.
+ - "branch1_newer": A nested object showing packages where the version in `branch1` is newer than in `branch2`. Each package has its version in both branches.
