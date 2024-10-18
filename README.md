@@ -22,11 +22,6 @@ This CLI tool compares binary packages between two ALT Linux branches (e.g., `si
    chmod +x compare_packages.py
    ```
 
-4. (Optional) Move the script to /usr/local/bin for easy access from anywhere:
-   ```bash
-   sudo cp compare_packages.py /usr/local/bin/package_comparator
-   ```
-   
 ## Usage
 
 The tool compares the binary packages of two ALT Linux branches and outputs the result in JSON format. You can specify the branch names and an optional file to save the result.
