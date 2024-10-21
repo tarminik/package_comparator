@@ -23,9 +23,9 @@ class TestBranchComparator(unittest.TestCase):
         self.comparator.get_packages = lambda branch: self.branch1_data if branch == 'branch1' else self.branch2_data
         result = self.comparator.compare_branches()
 
-        # Проверяем, что архитектура x86_64 есть в результатах
+        # Check that the x86_64 architecture is in the results
         self.assertIn('x86_64', result)
-        # Проверяем, что pkg2 в первой ветке новее
+        # Check that pkg2 in the first branch is newer
         self.assertIn('branch1_newer', result['x86_64'])
         self.assertIn('pkg2', result['x86_64']['branch1_newer'])
 
