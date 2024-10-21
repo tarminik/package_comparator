@@ -56,12 +56,12 @@ The result is a JSON object with the following structure:
         ],
         "branch1_newer": {
             "package_name5": {
-                "branch2_version": "version-release",
-                "branch1_version": "version-release"
+                "branch1_version": "version-release",
+                "branch2_version": "version-release"
             },
             "package_name6": {
-                "branch2_version": "version-release",
-                "branch1_version": "version-release"
+                "branch1_version": "version-release",
+                "branch2_version": "version-release"
             },
             ...
         }
@@ -88,7 +88,7 @@ This project includes unit tests to validate the comparison logic.
 To run all unit tests in the project, use the following command:
 
 ```bash
-python -m unittest discover -s tests
+python3 -m unittest discover -s tests
 ```
 
 This command will search for and execute all test files located in the `tests` directory.
@@ -98,13 +98,13 @@ This command will search for and execute all test files located in the `tests` d
 If you want to run tests for a specific module, for example, the tests for `rpm_version_compare`, use this command:
 
 ```bash
-python -m unittest tests.test_rpm_version_compare
+python3 -m unittest tests.test_rpm_version_compare
 ```
 
 You can also run tests for `branch_comparator`:
 
 ```bash
-python -m unittest tests.test_branch_comparator
+python3 -m unittest tests.test_branch_comparator
 ```
 
 ### Adding New Tests
