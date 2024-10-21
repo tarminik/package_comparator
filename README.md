@@ -77,3 +77,44 @@ The result is a JSON object with the following structure:
  - "branch2_not_in_branch1": Lists the packages that are present in `branch2` but not in `branch1`.
  - "branch1_not_in_branch2": Lists the packages that are present in `branch1` but not in `branch2`.
  - "branch1_newer": A nested object showing packages where the version in `branch1` is newer than in `branch2`. Each package has its version in both branches.
+
+
+## Running Unit Tests
+
+This project includes unit tests to validate the comparison logic.
+
+### Running All Tests
+
+To run all unit tests in the project, use the following command:
+
+```bash
+python -m unittest discover -s tests
+```
+
+This command will search for and execute all test files located in the `tests` directory.
+
+### Running Specific Test Files
+
+If you want to run tests for a specific module, for example, the tests for `rpm_version_compare`, use this command:
+
+```bash
+python -m unittest tests.test_rpm_version_compare
+```
+
+You can also run tests for `branch_comparator`:
+
+```bash
+python -m unittest tests.test_branch_comparator
+```
+
+### Adding New Tests
+
+If you want to add new tests, place them in the `tests/` directory following this structure:
+
+```
+tests/
+├── test_rpm_version_compare.py
+└── test_branch_comparator.py
+```
+
+Make sure to follow the `unittest` framework structure when writing new test cases.
