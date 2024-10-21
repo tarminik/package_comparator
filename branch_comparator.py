@@ -52,8 +52,8 @@ class BranchComparator:
                 # If the version in list1 is newer, add to the result
                 if RPMVersionCompare.rpm_label_compare((0, list1_vr, ''), (0, list2_vr, '')) > 0:
                     newer_in_list1[name] = {
-                        'list2_version': list2_vr,
-                        'list1_version': list1_vr
+                        'list1_version': list1_vr,
+                        'list2_version': list2_vr
                     }
 
         return newer_in_list1
@@ -78,8 +78,9 @@ class BranchComparator:
                 branch1_arch_packages = branch1_packages_by_arch[arch]
                 branch2_arch_packages = branch2_packages_by_arch[arch]
 
-                branch1_not_in_branch2, branch2_not_in_branch1 = self.compare_lists(branch2_arch_packages, branch1_arch_packages)
-                branch1_newer = self.compare_versions_across_archs(branch2_arch_packages, branch1_arch_packages)
+                branch1_not_in_branch2, branch2_not_in_branch1 = self.compare_lists(branch1_arch_packages,
+                                                                                    branch2_arch_packages)
+                branch1_newer = self.compare_versions_across_archs(branch1_arch_packages, branch2_arch_packages)
 
                 result[arch] = {
                     f"{self.branch2}_not_in_{self.branch1}": branch2_not_in_branch1,
